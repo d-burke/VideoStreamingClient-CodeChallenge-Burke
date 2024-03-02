@@ -77,7 +77,7 @@
         window.pageData = [
             {
                 title : 'Collections',
-                items : ['showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg'],
+                items : ['showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg'],
             },
             {
                 title : 'Inspired by True Stories',
@@ -105,6 +105,102 @@
         };
 
         createRows(window.pageData);
+    </script>
+
+    <script>
+        document.addEventListener('focus', function(event) {
+            const focusedElement = document.activeElement;
+            const coordinates = findElementCoordinatesInGrid(window.controls.pageElementsGrid, focusedElement);
+            if (coordinates) {
+                console.log('Focused element coordinates:', coordinates);
+
+                window.controls.focusCol = coordinates.col;
+                window.controls.focusRow = coordinates.row;
+
+                window.controls.currentElFocus = document.activeElement;
+            } else {
+                console.log('Focused element not found in the grid.');
+            }
+        }, true);
+    </script>
+
+    <script>
+        window.controls = {};
+        window.controls.currentElFocus = document.activeElement;
+        window.controls.pageElementsGrid = [];
+        window.controls.focusCol = 0;
+        window.controls.focusRow = 0;
+
+        const containers = document.getElementsByClassName('carousel-container');
+
+        for (let i = 0; i < containers.length; i++) {
+            const items = containers[i].getElementsByClassName('tabItem');
+            window.controls.pageElementsGrid.push(items);
+        }
+
+
+        function findElementCoordinatesInGrid(grid, focusedElement) {
+            for (let row = 0; row < grid.length; row++) {
+                for (let col = 0; col < grid[row].length; col++) {
+                if (grid[row][col] === focusedElement) {
+                    return { row: row, col: col };
+                }
+                }
+            }
+            return null;
+        }
+
+
+        function handleKeyPress(event) {
+            if(event.key === 'ArrowRight') {
+                if(window.controls.focusCol < window.controls.pageElementsGrid[window.controls.focusRow].length-1){
+                    window.controls.focusCol++;
+                    window.controls.currentElFocus = window.controls.pageElementsGrid[window.controls.focusRow][window.controls.focusCol];
+                    window.controls.currentElFocus.focus();
+                } else {
+                    console.log('right end');
+                }
+            } else if(event.key === 'ArrowLeft') {
+                if(window.controls.focusCol > 0){
+                    window.controls.focusCol--;
+                    window.controls.currentElFocus = window.controls.pageElementsGrid[window.controls.focusRow][window.controls.focusCol];
+                    window.controls.currentElFocus.focus();
+                } else {
+                    console.log('left end');
+                }
+            } else if(event.key === 'ArrowUp') {
+                if(window.controls.focusRow > 0){
+                    window.controls.focusRow--;
+                    if(window.controls.focusCol >= window.controls.pageElementsGrid[window.controls.focusRow].length){
+                        console.log('too far');
+                        let rowLength = window.controls.pageElementsGrid[window.controls.focusRow].length;
+                        window.controls.currentElFocus = window.controls.pageElementsGrid[window.controls.focusRow][rowLength-1];
+                    } else {
+                        window.controls.currentElFocus = window.controls.pageElementsGrid[window.controls.focusRow][window.controls.focusCol];
+                    }
+                    window.controls.currentElFocus.focus();
+                } else {
+                    console.log('top');
+                }
+            } else if(event.key === 'ArrowDown') {
+                if(window.controls.focusRow < window.controls.pageElementsGrid.length-1){
+                    window.controls.focusRow++;
+                    if(window.controls.focusCol >= window.controls.pageElementsGrid[window.controls.focusRow].length){
+                        console.log('too far');
+                        let rowLength = window.controls.pageElementsGrid[window.controls.focusRow].length;
+                        window.controls.currentElFocus = window.controls.pageElementsGrid[window.controls.focusRow][rowLength-1];
+                    } else {
+                        window.controls.currentElFocus = window.controls.pageElementsGrid[window.controls.focusRow][window.controls.focusCol];
+                    }
+                    window.controls.currentElFocus.focus();
+                } else {
+                    console.log('bottom');
+                }
+            } else if(event.key === 'Enter') {
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyPress);
 
     </script>
 
