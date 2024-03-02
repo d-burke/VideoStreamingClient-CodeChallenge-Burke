@@ -1,4 +1,53 @@
 body {
+    margin: 0px;
+    padding: 0px;
     background-color: #111;
+}
+
+#main {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Arial', sans-serif; 
     color: #CCC;
+    font-weight: 100;
+}
+
+h1 {
+    text-align: center;
+}
+
+.row {
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+h2 {
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 6px;
+}
+
+.carousel-container {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 10px;
+    overflow-x: auto;
+}
+
+.carousel-item {
+      width: 100%;
+      scroll-snap-align: start;
+}
+
+.thumbnail-img {
+    max-width: 250px;
+    max-height: 142px;
+    margin-right: 12px;
+    border-radius: 5px;
+    transition: transform 0.2s;
+}
+
+.thumbnail-img:hover {
+    transform: scale(1.1);
+    border: 1px solid #fff;
 }
