@@ -33,26 +33,26 @@
         <h1>Disney - Living Room Devices Client</h1>
         <div class="row">
             <h2 class="row-title">Collections</h2>
-            <div class="carousel-container">
-                <span class="carousel-item">
+            <div class="carousel-container" tabindex="0">
+                <span class="carousel-item" tabindex="0">
                     <img class="thumbnail-img" src="showImg.jpeg">
                 </span>
-                <span class="carousel-item">
+                <span class="carousel-item" tabindex="0">
                     <img class="thumbnail-img" src="showImg.jpeg">
                 </span>
-                <span class="carousel-item">
+                <span class="carousel-item" tabindex="0">
                     <img class="thumbnail-img" src="showImg.jpeg">
                 </span>
-                <span class="carousel-item">
+                <span class="carousel-item" tabindex="0">
                     <img class="thumbnail-img" src="showImg.jpeg">
                 </span>
-                <span class="carousel-item">
+                <span class="carousel-item" tabindex="0">
                     <img class="thumbnail-img" src="showImg.jpeg">
                 </span>
-                <span class="carousel-item">
+                <span class="carousel-item" tabindex="0">
                     <img class="thumbnail-img" src="showImg.jpeg">
                 </span>
-                <span class="carousel-item">
+                <span class="carousel-item" tabindex="0">
                     <img class="thumbnail-img" src="showImg.jpeg">
                 </span>
             </div>
@@ -62,29 +62,89 @@
             <h2 class="row-title">Collections</h2>
             <div class="carousel-container">
                 <span class="carousel-item">
-                    <img class="thumbnail-img" src="showImg.jpeg">
+                    <img class="thumbnail-img tabItem" tabindex="-1" src="showImg.jpeg">
                 </span>
                 <span class="carousel-item">
-                    <img class="thumbnail-img" src="showImg.jpeg">
+                    <img class="thumbnail-img tabItem" tabindex="-1" src="showImg.jpeg">
                 </span>
                 <span class="carousel-item">
-                    <img class="thumbnail-img" src="showImg.jpeg">
+                    <img class="thumbnail-img tabItem" tabindex="-1" src="showImg.jpeg">
                 </span>
                 <span class="carousel-item">
-                    <img class="thumbnail-img" src="showImg.jpeg">
+                    <img class="thumbnail-img tabItem" tabindex="-1" src="showImg.jpeg">
                 </span>
                 <span class="carousel-item">
-                    <img class="thumbnail-img" src="showImg.jpeg">
+                    <img class="thumbnail-img tabItem" tabindex="-1" src="showImg.jpeg">
                 </span>
                 <span class="carousel-item">
-                    <img class="thumbnail-img" src="showImg.jpeg">
+                    <img class="thumbnail-img tabItem" tabindex="-1" src="showImg.jpeg">
                 </span>
                 <span class="carousel-item">
-                    <img class="thumbnail-img" src="showImg.jpeg">
+                    <img class="thumbnail-img tabItem" tabindex="-1" src="showImg.jpeg">
                 </span>
             </div>
         </div>
 
     </div>
+
+
+<script>
+    function createRow(id) {
+        const rowElement = document.createElement('div');
+        rowElement.classList.add('row');
+        if(id) {
+            rowElement.id = id;
+        }
+        const titleElement = document.createElement('h2');
+        titleElement.classList.add('row-title');
+        titleElement.textContent = 'Collections';
+        rowElement.appendChild(titleElement);
+
+        return rowElement;
+    }
+
+    const generatedRowElement = createRow('myRowId');
+    const mainEl = document.getElementById('main');
+    mainEl.appendChild(generatedRowElement);
+
+
+
+function createCarouselContainer(imgUrls) {
+    if (!imgUrls || !imgUrls.length) {
+        return;
+    }
+
+    const container = document.createElement('div');
+    container.classList.add('carousel-container');
+
+    imgUrls.forEach(imgUrl => {
+        const carouselItem = document.createElement('span');
+        carouselItem.classList.add('carousel-item');
+
+        const imgElement = document.createElement('img');
+        imgElement.classList.add('thumbnail-img', 'tabItem');
+        imgElement.setAttribute('tabindex', '0');
+        imgElement.src = imgUrl;
+
+        carouselItem.appendChild(imgElement);
+        container.appendChild(carouselItem);
+    });
+
+    return container;
+}
+
+const imageUrls = [
+    'showImg.jpeg',
+    'showImg.jpeg',
+    'showImg.jpeg',
+];
+
+const generatedCarouselItems = createCarouselContainer(imageUrls);
+const row = document.getElementById('myRowId');
+row.appendChild(generatedCarouselItems);
+
+</script>
+
+
 </body>
 </html>
