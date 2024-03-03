@@ -34,6 +34,7 @@
     </div>
 
     <script>
+        // create page element functions
         function createRow(id, title) {
             const rowElement = document.createElement('div');
             rowElement.classList.add('row');
@@ -74,6 +75,7 @@
     </script>
 
     <script>
+        // generate page from data
         window.pageData = [
             {
                 title : 'Collections',
@@ -108,12 +110,11 @@
     </script>
 
     <script>
+        // keyboard controls
         document.addEventListener('focus', function(event) {
             const focusedElement = document.activeElement;
             const coordinates = findElementCoordinatesInGrid(window.controls.pageElementsGrid, focusedElement);
             if (coordinates) {
-                console.log('Focused element coordinates:', coordinates);
-
                 window.controls.focusCol = coordinates.col;
                 window.controls.focusRow = coordinates.row;
 
@@ -125,6 +126,7 @@
     </script>
 
     <script>
+        // DOM tracking focus
         window.controls = {};
         window.controls.currentElFocus = document.activeElement;
         window.controls.pageElementsGrid = [];
@@ -142,15 +144,15 @@
         function findElementCoordinatesInGrid(grid, focusedElement) {
             for (let row = 0; row < grid.length; row++) {
                 for (let col = 0; col < grid[row].length; col++) {
-                if (grid[row][col] === focusedElement) {
-                    return { row: row, col: col };
-                }
+                    if (grid[row][col] === focusedElement) {
+                        return { row: row, col: col };
+                    }
                 }
             }
             return null;
         }
 
-
+        // Keyboard controls
         function handleKeyPress(event) {
             if(event.key === 'ArrowRight') {
                 if(window.controls.focusCol < window.controls.pageElementsGrid[window.controls.focusRow].length-1){
@@ -170,7 +172,36 @@
                 }
             } else if(event.key === 'ArrowUp') {
                 if(window.controls.focusRow > 0){
+
+                    let currentRow = window.controls.pageElementsGrid[window.controls.focusRow];
+
                     window.controls.focusRow--;
+
+                    let moveFromRowElement = document.activeElement;
+
+                    let moveFromCarouselRow = moveFromRowElement.parentNode.parentNode;
+
+                    let moveToRowElement = window.controls.pageElementsGrid[window.controls.focusRow][0];
+
+                    let moveToCarouselfRow = moveToRowElement.parentNode.parentNode;
+
+
+                    let moveFromScrollPos = moveFromCarouselRow.scrollLeft;
+
+                    let moveToScrollPos = moveToCarouselfRow.scrollLeft;
+
+                    let rowPositionOffset =  moveToScrollPos - moveFromScrollPos;
+
+                    let elementWidth = moveFromCarouselRow.scrollWidth / currentRow.length;
+
+                    let units = (Math.round(-rowPositionOffset / elementWidth)) * -1;
+                        
+                    window.controls.focusCol += units;
+                    if(window.controls.focusCol < 0 ){
+                        window.controls.focusCol = 0;
+                    }
+
+
                     if(window.controls.focusCol >= window.controls.pageElementsGrid[window.controls.focusRow].length){
                         console.log('too far');
                         let rowLength = window.controls.pageElementsGrid[window.controls.focusRow].length;
@@ -184,7 +215,35 @@
                 }
             } else if(event.key === 'ArrowDown') {
                 if(window.controls.focusRow < window.controls.pageElementsGrid.length-1){
+
+                    let currentRow = window.controls.pageElementsGrid[window.controls.focusRow];
                     window.controls.focusRow++;
+
+                    let moveFromRowElement = document.activeElement;
+
+                    let moveFromCarouselRow = moveFromRowElement.parentNode.parentNode;
+
+                    let moveToRowElement = window.controls.pageElementsGrid[window.controls.focusRow][0];
+
+                    let moveToCarouselfRow = moveToRowElement.parentNode.parentNode;
+
+                    let moveFromScrollPos = moveFromCarouselRow.scrollLeft;
+
+                    let moveToScrollPos = moveToCarouselfRow.scrollLeft;
+
+
+                    let rowPositionOffset =  moveToScrollPos - moveFromScrollPos;
+
+                    let elementWidth = moveFromCarouselRow.scrollWidth / currentRow.length;
+
+
+                    let units = Math.round(rowPositionOffset / elementWidth);
+                        
+                    window.controls.focusCol += units;
+                    if(window.controls.focusCol < 0 ){
+                        window.controls.focusCol = 0;
+                    }
+
                     if(window.controls.focusCol >= window.controls.pageElementsGrid[window.controls.focusRow].length){
                         console.log('too far');
                         let rowLength = window.controls.pageElementsGrid[window.controls.focusRow].length;
