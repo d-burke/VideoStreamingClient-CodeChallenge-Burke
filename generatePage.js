@@ -5,7 +5,6 @@ function createPageRows(data) {
         let title = data[i].title;
         const generatedRowElement = createRow(rowId, title);
         mainEl.appendChild(generatedRowElement);
-
         let imageUrls = data[i].items;
         const generatedCarouselItems = createCarouselContainer(imageUrls);
         const row = document.getElementById(rowId);
@@ -23,7 +22,6 @@ function createRow(id, title) {
     titleElement.classList.add('row-title');
     titleElement.textContent = title;
     rowElement.appendChild(titleElement);
-
     return rowElement;
 }
 
@@ -31,10 +29,8 @@ function createCarouselContainer(imgUrls) {
     if (!imgUrls || !imgUrls.length) {
         return;
     }
-
     const container = document.createElement('div');
     container.classList.add('carousel-container');
-
     imgUrls.forEach((imgUrl) => {
         const carouselItem = document.createElement('span');
         carouselItem.classList.add('carousel-item');
@@ -50,7 +46,6 @@ function createCarouselContainer(imgUrls) {
         });
         imgElement.src = imgUrl;
     });
-
     return container;
 }
 
