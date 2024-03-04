@@ -1,4 +1,6 @@
-window.serverData = {
+setTimeout(()=>{startPage();},2000);
+
+window.data = {
     "data": {
         "StandardCollection": {
             "callToAction": null,

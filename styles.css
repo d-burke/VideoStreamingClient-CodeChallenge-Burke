@@ -8,19 +8,30 @@ body {
 #main {
     margin: 0px;
     padding: 0px;
-    font-family: "Lato", 'Arial', sans-serif; 
-    color: #CCC;
+    font-family: 'Lato', 'Arial', sans-serif;
+    color: #ccc;
     font-weight: 100;
 }
 
 h1 {
     text-align: center;
+    font-weight: 300;
+    margin-bottom: 0px;
+}
+
+#createdBy {
+    text-align: center;
+    font-weight: 100;
 }
 
 .row {
     margin-bottom: 0px;
     padding-left: 20px;
     min-height: 225px;
+}
+
+.row-title {
+    font-weight: 400;
 }
 
 h2 {
@@ -44,7 +55,7 @@ h2 {
     scrollbar-width: none;
 }
 
-.carousel-container::-webkit-scrollbar { 
+.carousel-container::-webkit-scrollbar {
     display: none;
 }
 
