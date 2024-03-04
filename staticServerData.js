@@ -1,4 +1,4 @@
-window.staticServerData = {
+window.serverData = {
     "data": {
         "StandardCollection": {
             "callToAction": null,

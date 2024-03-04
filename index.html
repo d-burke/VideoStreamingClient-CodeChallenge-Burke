@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disney - Living Room Devices Client</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
+    <!-- <script src="staticServerData.js"></script> -->
 </head>
 <body>
     <script>
@@ -19,6 +19,7 @@
                 .then(data => {
                     window.data = data;
                     console.log("Data successfully fetched and saved:", data);
+                    startPage();
                 })
                 .catch(error => {
                     console.error("Error fetching data:", error);
@@ -26,7 +27,7 @@
         }
         const realUrl = 'https://cd-static.bamgrid.com/dp-117731241344/home.json';
         const apiUrl = realUrl;
-        // fetchData(apiUrl);
+        fetchData(apiUrl);
     </script>
 
     <div id="main">
@@ -60,36 +61,39 @@
             imgUrls.forEach(imgUrl => {
                 const carouselItem = document.createElement('span');
                 carouselItem.classList.add('carousel-item');
-
                 const imgElement = document.createElement('img');
                 imgElement.classList.add('thumbnail-img', 'tabItem');
                 imgElement.setAttribute('tabindex', '0');
+                imgElement.addEventListener('load', function() {
+                    carouselItem.appendChild(imgElement);
+                    container.appendChild(carouselItem);
+                });
+                imgElement.addEventListener('error', function() {
+                    console.error(`Error loading image: ${imgUrls}`);
+                });
                 imgElement.src = imgUrl;
-
-                carouselItem.appendChild(imgElement);
-                container.appendChild(carouselItem);
             });
 
             return container;
         }
-    </script>
 
-    <script>
-        // generate page from data
-        window.pageData = [
-            {
-                title : 'Collections',
-                items : ['showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg'],
-            },
-            {
-                title : 'Inspired by True Stories',
-                items : ['showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg'],
-            },
-            {
-                title : 'Documentaries',
-                items : ['showImg.jpeg', 'showImg.jpeg'],
-            },
-        ];
+
+    // generate page from data
+        // window.pageData = [
+        //     {
+        //         title : 'Collections',
+        //         items : ['showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg'],
+        //     },
+        //     {
+        //         title : 'Inspired by True Stories',
+        //         items : ['showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg', 'showImg.jpeg'],
+        //     },
+        //     {
+        //         title : 'Documentaries',
+        //         items : ['showImg.jpeg', 'showImg.jpeg'],
+        //     },
+        // ];
+
 
         function createRows(data) {
             const mainEl = document.getElementById('main');
@@ -106,7 +110,144 @@
             }
         };
 
-        createRows(window.pageData);
+        // createRows(window.pageData);
+
+        // document.getElementById('main').innerHTML += JSON.stringify(window.pageData); //
+
+
+        // function startPage() {
+        //     mapData();
+        //     createRows(window.pageData);
+        // };
+
+        // startPage(); //
+
+
+    </script>
+
+    <script>
+    // data Parsing
+        function convertObjPathStringToKeysArray(path) {
+            var letters = path.split('');
+            let keyLettersTemp = [];
+            let keys = [];
+            let quoteChar = '';
+            let squareChar = '';
+            for (let i = 0; i < letters.length; i++) {
+                if (quoteChar.length > 0) {
+                    if (letters[i] === quoteChar) {
+                        quoteChar = '';
+                        keys.push(keyLettersTemp.join(''));
+                        keyLettersTemp = [];
+                    } else {
+                        keyLettersTemp.push(letters[i]);
+                    }
+                } else if (letters[i] === `"` || letters[i] === `'` ) {
+                    keys.push(keyLettersTemp.join(''));
+                    keyLettersTemp = [];
+                    quoteChar = letters[i];
+                } else if (squareChar.length > 0) {
+                    if (letters[i] === `]`) {
+                        squareChar = '';
+                        keys.push(keyLettersTemp.join(''));
+                        keyLettersTemp = [];
+                    } else {
+                        keyLettersTemp.push(letters[i]);
+                    }
+                } else if (letters[i] === `[` ) {
+                    keys.push(keyLettersTemp.join(''));
+                    keyLettersTemp = [];
+                    squareChar = letters[i];
+                } else if (letters[i] === '.') {
+                    keys.push(keyLettersTemp.join(''));
+                    keyLettersTemp = [];
+                } else {
+                    keyLettersTemp.push(letters[i]);
+                }
+                if (i === letters.length - 1) {
+                    keys.push(keyLettersTemp.join(''));
+                }
+            }
+            keys = keys.filter(element => element.length > 0);
+            return keys;
+        };
+
+        function safeAccessObj(obj, keys = []) {
+            for (let i = 0; i < keys.length; i++) {
+                if (!obj || typeof obj !== 'object') {
+                    return undefined;
+                }
+                obj = obj[keys[i]];
+            }
+            return obj;
+        }   
+
+        
+//
+
+
+
+        
+
+
+
+        ///
+        function mapData() {
+            window.pageData = [];
+            const sourceData = window.data.data; // real server call data
+            // const sourceData = window.serverData.data; // static data !!!!
+            const rowObjects = sourceData.StandardCollection.containers;
+
+            // console.log('rowObjects: ',rowObjects);
+            for (let i = 0; i < rowObjects.length; i++) {
+                // console.log('LLLLLLLoop row ' + i + ': ', rowObjects[i]);
+                // let catagoryTitle = '';
+                let catagoryTitle = rowObjects[i].set.text.title.full.set.default.content; //save this to title
+                // console.log('catagoryTitle row ' + i + ': ', catagoryTitle);
+
+                if(catagoryTitle && rowObjects[i].set.items) {
+                    let items = rowObjects[i].set.items;
+                    // let items = safeAccessObj(window, convertObjPathStringToKeysArray("rowObjects[i].set.items"));
+                    // console.log('items: ', items);
+                    if (items.length) {
+                        // console.log('---Length!');
+                        let imgItems = [];
+                        for (let j = 0; j < items.length; j++) {
+                            let imgUrl = '';
+                            imgUrl = safeAccessObj(items[j], convertObjPathStringToKeysArray(`image.tile['1.78'].series.default.url`));
+                            
+                            if (!imgUrl) {
+                                imgUrl = safeAccessObj(items[j], convertObjPathStringToKeysArray(`image.tile['1.78'].program.default.url`));
+                            }
+                            if (!imgUrl) {
+                                imgUrl = safeAccessObj(items[j], convertObjPathStringToKeysArray(`image.tile['1.78'].default.default.url`));
+                            }
+
+                            if (imgUrl) {
+                                // console.log('iiiiiiimgURg: ', imgUrl);
+                                imgItems.push(imgUrl);
+                            } else {
+                                console.log("No imgURg look in image.tile['1.78'].series.default.url in image.tile: ", items[j].image.tile);
+                            }
+
+                        }
+                        // console.log('imgItems: ', imgItems);
+                        window.pageData.push({
+                            'title' : catagoryTitle,
+                            'items' : imgItems,
+                        });
+
+                    }
+                }      
+            }
+        };
+
+//
+
+
+
+
+
     </script>
 
     <script>
@@ -127,19 +268,6 @@
 
     <script>
         // DOM tracking focus
-        window.controls = {};
-        window.controls.currentElFocus = document.activeElement;
-        window.controls.pageElementsGrid = [];
-        window.controls.focusCol = 0;
-        window.controls.focusRow = 0;
-
-        const containers = document.getElementsByClassName('carousel-container');
-
-        for (let i = 0; i < containers.length; i++) {
-            const items = containers[i].getElementsByClassName('tabItem');
-            window.controls.pageElementsGrid.push(items);
-        }
-
 
         function findElementCoordinatesInGrid(grid, focusedElement) {
             for (let row = 0; row < grid.length; row++) {
@@ -259,7 +387,32 @@
             }
         }
 
-        document.addEventListener('keydown', handleKeyPress);
+        function addKeyboardControls() {
+            window.controls = {};
+            window.controls.currentElFocus = document.activeElement;
+            window.controls.pageElementsGrid = [];
+            window.controls.focusCol = 0;
+            window.controls.focusRow = 0;
+
+            const containers = document.getElementsByClassName('carousel-container');
+
+            for (let i = 0; i < containers.length; i++) {
+                const items = containers[i].getElementsByClassName('tabItem');
+                window.controls.pageElementsGrid.push(items);
+            }
+            document.addEventListener('keydown', handleKeyPress);
+        }
+        
+
+
+//
+        function startPage() {
+            mapData();
+            createRows(window.pageData);
+            addKeyboardControls();
+        };
+
+        // startPage(); //
 
     </script>
 
