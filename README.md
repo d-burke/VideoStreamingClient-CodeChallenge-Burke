@@ -5,6 +5,9 @@ https://www.danburkesoftwareengineer.com/
 Assignment Title:
 Disney - Living Room Devices Client
 
+See It Live:
+https://danburkesoftwareengineer.com/indexVidStreamChallenge.html
+
 Purpose:
 Engineering Interview Candidate Assignment
 Take-Home Coding Assignment
